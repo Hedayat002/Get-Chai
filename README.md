@@ -1,7 +1,8 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
-
+🫖 GetmeChai — Creator Support Platform
+GetmeChai is an open-source Patreon-style platform that lets creators receive support from their fans through one-time or recurring donations. Whether you're a writer, developer, artist, or content creator, GetmeChai makes it easy to connect with your community and get the support you deserve.
 First, run the development server:
 
 ```bash
