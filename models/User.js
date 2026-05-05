@@ -1,34 +1,46 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
 
-const userSchema = new Schema(
+const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-     
+      required: true,
     },
+
     email: {
       type: String,
       required: true,
-      
+      unique: true,
     },
+
     username: {
       type: String,
-      required: true
+      required: true,
+      unique: true,
     },
-    profilepic: { type: String },
+
+    profilepic: {
+      type: String,
+      default: "",
+    },
+
     coverpic: {
       type: String,
+      default: "",
     },
-    razorpayid: { type: String },
-    razorpaysecret: { type: String },
+
+    razorpayid: {
+      type: String,
+      default: "",
+    },
+
+    razorpaysecret: {
+      type: String,
+      default: "",
+    },
   },
-  
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-// export const User = mongoose.model("User", userSchema);
-
-export default mongoose.models.User || model("User", userSchema);;
+// Prevent model overwrite error in Next.js
+export default mongoose.models.User || mongoose.model("User", UserSchema);
