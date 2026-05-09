@@ -33,18 +33,19 @@ export const authOptions = NextAuth({
           username: userEmail.split("@")[0],
         });
       }
-
-      return true;
-    },
-    async session({ session }) {
-      await connectDb();
-      const dbUser = await User.findOne({ email: session?.user?.email });
-      if (dbUser) {
-        session.user.name = dbUser.username;
-      }
-      return session;
-    },
+     
+      return true
+    }
+   
   },
-});
+  async session({ session, user, token }) {
+    const dbUser = await User.findOne({email: session.user.email});
+    session.user.name = dbUser.username
+    return session
+  },
+}
 
-export { authOptions as GET, authOptions as POST };
+
+  })
+
+  export {authOptions as GET , authOptions as POST}
