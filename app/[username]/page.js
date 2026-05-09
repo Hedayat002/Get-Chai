@@ -1,25 +1,24 @@
-import React from 'react'
-import PaymentPage from '@/components/PaymentPage'
+import React from 'react';
+import PaymentPage from '@/components/PaymentPage';
 import { notFound } from 'next/navigation';
 import connectDb from '@/db/connectDb';
 import User from '@/models/User';
 
+export const dynamic = "force-dynamic";
 
 const Username = async ({ params }) => {
-  //if the username is not persent in the database , show a 404 page 
-  const checkUser = async ()=>{
-    await connectDb()
-    let u = await User.findOne({ username: params.username })
-    if (!u) return notFound()
-
+  const username = params?.username;
+  if (!username) {
+    return notFound();
   }
-    await checkUser()
 
+  await connectDb();
+  const user = await User.findOne({ username });
+  if (!user) {
+    return notFound();
+  }
 
-  return (
-    <>
-      <PaymentPage username={params.username} />
-    </>
-  )
-}
-export default Username
+  return <PaymentPage username={username} />;
+};
+
+export default Username;

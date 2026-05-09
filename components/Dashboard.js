@@ -1,28 +1,29 @@
 
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
-import { fetchuser,updateProfile} from '@/actions/useraction'
+import { fetchuser, updateProfile } from '@/actions/useraction'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Bounce } from 'react-toastify';
 
 const Dashboard = () => {
-    const { data: session, update } = useSession()
+    const { data: session, status } = useSession()
     const router = useRouter()
     const [form, setform] = useState({})
 
     useEffect(() => {
-       
+        if (status === 'loading') {
+            return;
+        }
 
         if (!session) {
             router.push('/login')
-        }
-        else {
+        } else {
             getData()
         }
-    }, [])
+    }, [session, status, router])
 
     const getData = async () => {
         try {

@@ -10,40 +10,37 @@ export const POST = async (req) => {
   let body = await req.formData();
   body = Object.fromEntries(body);
 
-  //chack if razorpayOrderId is persent on the server
-
-  let razorpayOrderId = await Payment.findOne({ oid: body.razorpay_order_id });
-  if (!razorpayOrderId) {
+  const razorpayOrder = await Payment.findOne({ oid: body.razorpay_order_id });
+  if (!razorpayOrder) {
     return NextResponse.json({ success: false, message: "Order Id not found" });
   }
 
-  //fetch the secret of the user who is getting the payment
+  const user = await User.findOne({ username: razorpayOrder.to_user });
+  if (!user || !user.razorpaysecret) {
+    return NextResponse.json({ success: false, message: "User or Razorpay secret not found" });
+  }
 
-  let user = await User.findOne({ username: razorpayOrderId.to_user });
-  const secret = user.razorpaysecret;
-
-  //varify the Payment
-  let veryfyPayment = validatePaymentVerification(
+  const verifyPayment = validatePaymentVerification(
     { order_id: body.razorpay_order_id, payment_id: body.razorpay_payment_id },
     body.razorpay_signature,
-    secret
+    user.razorpaysecret
   );
 
-  if (veryfyPayment) {
-    //update the payment status
-
+  if (verifyPayment) {
     const updatePayment = await Payment.findOneAndUpdate(
       { oid: body.razorpay_order_id },
-      { done: "true" },
+      { done: true },
       { new: true }
     );
+
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_URL;
     return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_URL}/${updatePayment.to_user}?paymentdone=true`
+      `${baseUrl}/${updatePayment.to_user}?paymentdone=true`
     );
-  } else {
-    return NextResponse.json({
-      success: false,
-      message: "Payment Varified Failed",
-    });
   }
+
+  return NextResponse.json({
+    success: false,
+    message: "Payment verification failed",
+  });
 };

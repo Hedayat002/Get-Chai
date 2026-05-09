@@ -18,25 +18,24 @@ const PaymentPage = ({ username }) => {
 
   useEffect(() => {
     getData();
-}, []);
+  }, [username]);
 
-useEffect(() => {
-  if(searchParams.get("paymentdone") == "true"){
-  toast('Thanks for your donation!', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
+  useEffect(() => {
+    if (searchParams.get("paymentdone") === "true") {
+      toast('Thanks for your donation!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
       });
-  }
-  router.push(`/${username}`)
-
-}, [])
+      router.replace(`/${username}`);
+    }
+  }, [searchParams, username, router]);
   const handleChange = (e) => {
     setPaymentform({ ...paymentform, [e.target.name]: e.target.value });
   };

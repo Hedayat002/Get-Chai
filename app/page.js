@@ -53,7 +53,7 @@ export default function Home() {
         <div className="flex items-center justify-center w-[90%] h-[40vh] md:w-[50%] md:h-[40vh] lg:w-[50%] lg:h-[40vh] xl:w-[50%] xl:h-[40vh]">
           {/* <iframe className="w-full h-full" src="https://www.youtube.com/embed/ojuUnfqnUI0?si=wMUv4DG3ia6Wt4zn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> */}
 
-          <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="light" data-type="HORIZONTAL" data-vanity="hedayat002" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/hedayat002?trk=profile-badge"></a></div>
+          <div className="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="light" data-type="HORIZONTAL" data-vanity="hedayat002" data-version="v1"><a className="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/hedayat002?trk=profile-badge"></a></div>
           </div>
       
       </div>
