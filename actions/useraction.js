@@ -48,32 +48,40 @@ export const fetchuser = async(username)=>{
 }
 
 export const fetchpayments = async(username)=>{
+  
   try {
     await connectDb()
-    let p = await Payment.find({ to_user: username, done: true }).sort({ amount: -1 }).limit(10).lean()
+    let p = await Payment.find({ to_user: username, done:true }).sort({ amount: -1 }).limit(10).lean()
     return p
   } catch (error) {
     console.error("Error fetching payments:", error)
     throw error
   }
+
 }
 
-export const updateProfile = async (data, oldusername) => {
+export const updateProfile = async (data,oldusername) =>{
   await connectDb() // Step 1: Connect to the database
   let ndata = Object.fromEntries(data) // Step 2: Convert FormData to an object
 
-  // If the username is being updated, check if the new username is available
-  if (oldusername !== ndata.username) {
-    const existingUser = await User.findOne({ username: ndata.username });
-    if (existingUser) {
-      return { error: "Username already exists" };
+  //If the username is being updated ,chack if username is available
+  if(oldusername !== ndata.username){
+    let u = await User.findOne({username: ndata.username})
+    if (u){
+      return {error:"Username is already exists"} // Step 5: Return an error if the username is taken
+    }
+  
+// Step 6: Update the user profile
+  await User.updateOne({email: ndata.email}, ndata)
+  
+  
+   // Now update all the usernames in the Payments table 
+   await Payment.updateMany({to_user: oldusername}, {to_user: ndata.username})
+
+  }
+   else{   
+    await User.updateOne({email: ndata.email}, ndata)
     }
 
-    await User.updateOne({ username: oldusername }, ndata);
-    await Payment.updateMany({ to_user: oldusername }, { to_user: ndata.username });
-  } else {
-    await User.updateOne({ username: oldusername }, ndata);
-  }
 
-  return { success: true };
 }
